@@ -1,0 +1,15 @@
+{
+    
+    "CaSR_Variables": {
+        "wind_speed": "CaSR_v3.1_P_UVC_10m",
+        "wind_direction": "CaSR_v3.1_P_WDC_10m"
+    },
+
+    "Climate_Variables": {
+        "wind_speed": "CaSR_v3.1_P_UVC_10m",
+        "wind_direction": "CaSR_v3.1_P_WDC_10m",
+        "wind_run": "CaSR_v3.1_P_UVC_10m"
+    }
+
+
+}
