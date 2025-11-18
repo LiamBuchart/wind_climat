@@ -1,0 +1,36 @@
+{
+    "seasons" : [
+        {
+            "name": "DJF",
+            "months": {
+                "all": [12, 1, 2],
+                "mstart": "12",
+                "mend": "02"
+            }
+        },
+        {
+            "name": "MAM",
+            "months": {
+                "all": [3, 4, 5],
+                "mstart": "03",
+                "mend": "05"
+            }
+        },
+        {
+            "name": "JJA",
+            "months": {
+                "all": [6, 7, 8],
+                "mstart": "06",
+                "mend": "08"
+            }            
+        },
+        {
+            "name": "SON",
+            "months": {
+                "all": [9, 10, 11],
+                "mstart": "09",
+                "mend": "11"
+            }            
+        }
+    ]
+}

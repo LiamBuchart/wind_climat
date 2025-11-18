@@ -4,6 +4,7 @@
 
 """
 from datetime import date, timedelta
+import calendar
 
 def get_dates_in_year(year):
     start = date(year-1, 12, 1)
@@ -30,3 +31,7 @@ def get_date_from_years(y0, y1, month, day):
         except ValueError:
             continue  # skip invalid dates
     return dates
+
+def get_days_in_month(year, month):
+    num_days = calendar.monthrange(year, month)[1]
+    return [day for day in range(1, num_days + 1)]

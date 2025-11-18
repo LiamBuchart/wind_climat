@@ -14,17 +14,6 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date, timedelta
 from utils import get_date_from_years
 
-input_year = 1991
-link = "https://hpfx.collab.science.gc.ca/~scar700/rcas-casr/data/CaSRv3.1/netcdf/"
-
-y0 = 1990
-y1 = 2020
-month = 2
-day = 17
-
-dates = get_date_from_years(y0, y1, month, day)
-print(dates)
-
 # %%
 def download_data(link, file_name):
     # check if it exists
@@ -43,7 +32,7 @@ def download_data(link, file_name):
                 for chunk in response.iter_content(chunk_size=8192):
                     file.write(chunk)
 
-            print(f"File downloaded successfully: {file_name}, moving to /temp/ ...")    
+            print(f"File downloaded successfully: {file_name}, moving to ./temp/ ...")    
 
             dst_dir = "./temp"
 
@@ -55,9 +44,10 @@ def download_data(link, file_name):
 
 #%%
 # parallization cause this thang is slooow
-with ThreadPoolExecutor(max_workers=32) as executor:
-    futures = [executor.submit(download_data, link, f"{date}12.nc") for date in dates]
-    for future in as_completed(futures):
-        result = future.result()  # handle result or exceptions if needed
+def run_parallel(dates, link):
+    with ThreadPoolExecutor(max_workers=32) as executor:
+        futures = [executor.submit(download_data, link, f"{date}12.nc") for date in dates]
+        for future in as_completed(futures):
+            result = future.result()  # handle result or exceptions if needed
 
-# %%
+
