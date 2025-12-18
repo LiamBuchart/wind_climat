@@ -3,12 +3,13 @@ import os
 import json
 import xarray as xr
 import time
+import numpy as np
 
 
 # Set the month to process (e.g., February)
-month = 1
+month = 4
 month_str = f"m{month:02d}"
-wind_var = "wind_direction"  # ["wind_speed", "wind_direction"]
+wind_var = "wind_speed"  # ["wind_speed", "wind_direction"]
 
 data_dir = "climatology/daily/"
 output_dir = "climatology/monthly/"
@@ -41,12 +42,19 @@ def squeeze_quantile(da):
 
 #%%
 ws_list = []
-for file in wind_files:  # NOTE: not using full list yet
+start_time = time.time()
+for file in wind_files:  
     ds = xr.open_dataset(os.path.join(data_dir, file), chunks={})
     #ds[casr_vars["CaSR_Variables"]["wind_speed"]].plot()
-    # Adjust variable name as needed
-    ws = ds[casr_vars["CaSR_Variables"][wind_var]]
-    #ws = ds[list(ds.data_vars)[0]]
+    ws = ds[casr_vars["CaSR_Variables"][wind_var]].compute()
+
+    print(f"Trimming Dataset {file}...")
+    # trim all lons >309 (-51W) to shrink file enough for compression eastern in canada
+    trim_lon = 309
+    ws = ws.where(ws['lon'] <= trim_lon, drop=True)
+    trim_lon = 216  # (-144W) western in Canada
+    ws = ws.where(ws['lon'] >= trim_lon, drop=True)
+
     ws_list.append(ws)
 
 if ws_list:
@@ -55,6 +63,7 @@ if ws_list:
     mean = ws_all.mean(dim="time")
     median = ws_all.median(dim="time")
     std = ws_all.std(dim="time")
+    max = ws_all.max(dim="time")
 
     p10 = squeeze_quantile(ws_all.quantile(0.1, dim="time"))
     p25 = squeeze_quantile(ws_all.quantile(0.25, dim="time"))
@@ -70,19 +79,19 @@ if ws_list:
         "p25": p25,
         "p75": p75,
         "p90": p90,
-        "p95": p95
+        "p95": p95,
+        "max": max
     })
 
-    start_time = time.time()
     print("Starting compression...")
     # Save to NetCDF (fast and widely supported)
     stats_ds.to_netcdf(output_file, engine="netcdf4")
     print(f"Saved stats to {output_file}")
     end_time = time.time()
     elapsed_time = end_time - start_time
-    print("Time to save: ", elapsed_time)
+    print(f"Time to save: {int(elapsed_time)/60} minutes")
 else:
     print("No windspeed files found for this month.")
 
-
+stats_ds.close()
 # %%

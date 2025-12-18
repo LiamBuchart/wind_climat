@@ -66,7 +66,7 @@ for month in months:
                 except Exception as e:
                     # Unexpected error – report and continue
                     print(f"Error removing '{file_path}': {e}")
-        print(f"Cleaned .nc files from {temp_dir}")
+        print(f"Cleaned (or tried) .nc files from {temp_dir}")
 
     print(f"All dates in {month:02d} are processed.")
 

@@ -30,8 +30,8 @@ def label_line(ax, line, x, label=None, align=True, **kwargs):
 
     if align:
         # Calculate slope for rotation
-        dx = (xdata[2] - xdata[1]) * 2
-        dy = (ydata[2] - ydata[1]) * 2
+        dx = (xdata[3] - xdata[1]) * 2
+        dy = (ydata[3] - ydata[1]) * 2
         angle = np.degrees(np.arctan2(dy, dx))
     else:
         angle = 0

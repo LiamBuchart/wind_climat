@@ -44,23 +44,24 @@ def set_areal_query(mstart, mend, year, bbox):
     output: SQL query string
     """
 
-    min_lon = bbox["west"]
-    max_lon = bbox["east"]
+    min_lon = bbox["west"]-0.2
+    max_lon = bbox["east"]+0.2
 
-    min_lat = bbox["south"]
-    max_lat = bbox["north"]
+    min_lat = bbox["south"]-0.2
+    max_lat = bbox["north"]+0.2
 
     dend = last_day_of_month(year, mend)
 
     # break query down into smaller bits
-    q1 = f"SELECT cwfis_allstn{year}.aes, lat, lon, elev, ws, wg, wdir, from cwfis_allstn{year}, can_hly2020s where "
-    q2 = f"cwfis_allstn{year}.aes in (SELECT aes from cwfis_allstn{year} where "
-    q3 = f"lon between {min_lon} and {max_lon} and lat between {min_lat} and {max_lat}) "
-    q4 = f"and rep_date between '{year}-{mstart:02d}-01 00:00:00' and {year}-{mend:02d}-{dend} 23:00:00' and "
-    q5 = f"cwfis_allstn{year}.aes = can_hly2020s order by rep_date, cwfis_allstn{year}.aes;"
+    q1 = f"SELECT cwfis_allstn{year}.aes, rep_date, lat, lon, elev, ws, wg, wdir FROM cwfis_allstn{year}, can_hly2020s WHERE "  # cwfis_allstn{year},
+    q2 = f"cwfis_allstn{year}.aes in (SELECT aes FROM cwfis_allstn{year} WHERE "
+    q3 = f"lon BETWEEN {min_lon} AND {max_lon} AND lat BETWEEN {min_lat} AND {max_lat}) "
+    q4 = f"AND rep_date BETWEEN '{year}-{mstart:02d}-01 00:00:00' AND '{year}-{mend:02d}-{dend} 23:00:00' AND "
+    q5 = f"cwfis_allstn{year}.aes = can_hly2020s.aes ORDER BY rep_date, cwfis_allstn{year}.aes;"
 
     # query from can_hly2020s
     QUERY = q1 + q2 + q3 + q4 + q5
+    print(QUERY)
 
     return QUERY
 

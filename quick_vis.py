@@ -13,20 +13,22 @@ import cartopy.feature as cfeature
 import json
 
 ##### USER INPUT #####
-data_dir = "./climatology"
+data_dir = "./climatology/monthly"
 year = 1990
 month = 2
 
-variable = "wind_direction"
+variable = "winddirection"
 ##### END USER INPUT #####
 
-with open("variables.json", 'r') as f:
+with open("./utils/variables.json", 'r') as f:
     casr_vars = json.load(f)
 var = casr_vars["Climate_Variables"][variable]
 
-file = f"{data_dir}/{variable}_monthly_{year}-{month:02d}.h5"
+file = f"{data_dir}/1990-2020_monthly_{variable}_stats_m{month:02d}.nc"
+
 
 ds = xr.open_dataset(file, engine="netcdf4")
+print(ds)
 
 # %%
 # make the map
@@ -53,5 +55,5 @@ def quick_da_map(ds, var_name, title):
     plt.show()
 
 # %%
-quick_da_map(ds, var, f"{var}_{year}_{month}_Quick_Vis")
+quick_da_map(ds, "mean", f"{var}_{year}_{month}_Quick_Vis")
 # %%
