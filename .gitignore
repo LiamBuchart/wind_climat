@@ -12,7 +12,7 @@ allstn*
 /climatology/daily
 
 # temp files for downloads
-/operation/output
+/operational/output
 
 # double check
 *hrly_winddir*

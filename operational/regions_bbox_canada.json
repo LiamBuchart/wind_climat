@@ -53,6 +53,15 @@
         "east": -52.6,
         "north": 83.1
       }
+    },
+    {
+      "name": "Canadian Rockies",
+      "bbox": {
+        "west": -124.0,
+        "south": 48.0,
+        "east": -111.0,
+        "north": 56.0
+      }
     }
   ]
 }
